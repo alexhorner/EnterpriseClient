@@ -6,4 +6,6 @@ _G.enterprise = {
 
 term.redirect(enterprise.driver.display);
 
-print("Enterprise Loaded");
+term.clear();
+print("EnterOS");
+shell.run("shell");

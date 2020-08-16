@@ -151,6 +151,8 @@ end
 
 
 return {
+    nterm = nterm,
+
     bind = bind,
     unbind = unbind,
 
