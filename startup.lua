@@ -1,6 +1,6 @@
 _G.enterprise = {
     driver = {
-        display = loadfile("/system/drivers/display.lua");
+        display = loadfile("/system/drivers/display.lua")();
     }
 };
 
