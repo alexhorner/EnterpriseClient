@@ -1,20 +1,24 @@
--- Enterprise Monitor Mirror Driver
+-- Enterprise Display Driver
 
 local nterm = term.native();
+local enterdisplays = {};
 
-local monitor_names = peripheral.getNames("monitor");
-local monitors = {};
+local function bind(enterdisplay)
+    table.insert(enterdisplays, enterdisplay);
 
-for i = 1, #monitor_names do
-    table.insert(monitors, peripheral.wrap(monitor_names[i]));
+    return #enterdisplays;
+end
+
+local function unbind(index)
+    table.remove(enterdisplays, index);
 end
 
 local function clear()
     nterm.clear();
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].clear();
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].clear();
         end
     end
 end
@@ -22,9 +26,9 @@ end
 local function setBackgroundColour(colour)
     nterm.setBackgroundColour(colour);
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].setBackgroundColour(colour);
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].setBackgroundColour(colour);
         end
     end
 end
@@ -32,9 +36,9 @@ end
 local function setTextColour(colour)
     nterm.setTextColour(colour);
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].setTextColour(colour);
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].setTextColour(colour);
         end
     end
 end
@@ -42,9 +46,9 @@ end
 local function setCursorPos(x, y)
     nterm.setCursorPos(x, y);
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].setCursorPos(x, y);
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].setCursorPos(x, y);
         end
     end
 end
@@ -52,9 +56,9 @@ end
 local function setCursorBlink(blink)
     nterm.setCursorBlink(blink);
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].setCursorBlink(blink);
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].setCursorBlink(blink);
         end
     end
 end
@@ -62,9 +66,9 @@ end
 local function blit(text, textColour, backgroundColour)
     nterm.blit(text, textColour, backgroundColour);
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].blit(text, textColour, backgroundColour);
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].blit(text, textColour, backgroundColour);
         end
     end
 end
@@ -72,9 +76,9 @@ end
 local function write(text)
     nterm.write(text);
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].write(text);
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].write(text);
         end
     end
 end
@@ -82,9 +86,9 @@ end
 local function clearLine()
     nterm.clearLine();
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].clearLine();
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].clearLine();
         end
     end
 end
@@ -97,6 +101,20 @@ local function isColour()
     return nterm.isColour();
 end
 
+local function getPaletteColour()
+    return nterm.getPaletteColour();
+end
+
+local function setPaletteColour(colour, red, green, blue)
+    nterm.setPaletteColour(colour, red, green, blue);
+
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].setPaletteColour(colour, red, green, blue);
+        end
+    end
+end
+
 local function getSize()
     return nterm.getSize();
 end
@@ -104,9 +122,9 @@ end
 local function scroll(lines)
     nterm.scroll(lines);
 
-    if #monitors > 0 then
-        for i = 1, #monitors do
-            monitors[i].scroll(lines);
+    if #enterdisplays > 0 then
+        for i = 1, #enterdisplays do
+            enterdisplays[i].scroll(lines);
         end
     end
 end
@@ -133,6 +151,9 @@ end
 
 
 return {
+    bind = bind,
+    unbind = unbind,
+
     clear = clear,
     setBackgroundColour = setBackgroundColour,
     setBackgroundColor = setBackgroundColour,
@@ -146,6 +167,10 @@ return {
     getCursorPos = getCursorPos,
     isColour = isColour,
     isColor = isColour,
+    getPaletteColour = getPaletteColour,
+    getPaletteColor = getPaletteColour,
+    setPaletteColour = setPaletteColour,
+    setPaletteColor = setPaletteColour,
     getSize = getSize,
     scroll = scroll,
     redirect = redirect,
